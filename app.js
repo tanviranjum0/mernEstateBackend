@@ -29,7 +29,9 @@ mongoose
   .catch((err) => {
     console.log(err);
   });
-
+app.get("/", (req, res) => {
+  res.send("Hey Therer");
+});
 app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/listing", listingRouter);
