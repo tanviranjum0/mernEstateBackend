@@ -2,7 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-// const dotenv = require("dotenv");
+const dotenv = require("dotenv");
 const authRouter = require("./routes/auth");
 const userRouter = require("./routes/user");
 const listingRouter = require("./routes/listing");
@@ -10,7 +10,7 @@ const path = require("path");
 
 const app = express();
 
-// dotenv.config();
+dotenv.config();
 app.set("view engine", "ejs");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
