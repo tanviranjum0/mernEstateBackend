@@ -24,7 +24,7 @@ app.use(
 );
 
 mongoose
-  .connect(process.env.MONGO)
+  .connect(process.env.PORT)
   .then(() => {
     console.log("Connected to MongoDB!");
   })
