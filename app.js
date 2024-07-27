@@ -9,7 +9,9 @@ const listingRouter = require("./routes/listing");
 const path = require("path");
 
 const app = express();
+
 // dotenv.config();
+app.set("view engine", "ejs");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
@@ -31,7 +33,7 @@ mongoose
   });
 
 app.get("/", (req, res) => {
-  res.status(200).json("Hey Therer");
+  res.render("index");
 });
 
 app.all("/favicon.ico", (req, res) => res.status(204));
@@ -56,9 +58,9 @@ app.use(function (req, res, next) {
   );
   next();
 });
-const port = process.env.PORT || 3000;
+
 app.listen(
-  port,
+  process.env.PORT || 3000,
   "0.0.0.0",
   console.log(`Server started at port ${process.env.PORT}`)
 );
