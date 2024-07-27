@@ -2,14 +2,14 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-const dotenv = require("dotenv");
+// const dotenv = require("dotenv");
 const authRouter = require("./routes/auth");
 const userRouter = require("./routes/user");
 const listingRouter = require("./routes/listing");
 const path = require("path");
 
 const app = express();
-dotenv.config();
+// dotenv.config();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
@@ -34,7 +34,7 @@ app.get("/", (req, res) => {
   res.status(200).json("Hey Therer");
 });
 
-app.get("/favicon.ico", (req, res) => res.status(204));
+app.all("/favicon.ico", (req, res) => res.status(204));
 app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/listing", listingRouter);
