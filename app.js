@@ -29,9 +29,12 @@ mongoose
   .catch((err) => {
     console.log(err);
   });
+
 app.get("/", (req, res) => {
-  res.send("Hey Therer");
+  res.status(200).json("Hey Therer");
 });
+
+app.get("/favicon.ico", (req, res) => res.status(204));
 app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/listing", listingRouter);
