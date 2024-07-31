@@ -2,11 +2,11 @@ const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
-const signup = async (req, res) => {
+const signup = async (req, res, next) => {
   const { username, password, email } = await req.body;
   const existUser = await User.findOne({ email });
 
-  if (existUser) return res.status(404).send("This email is already existed");
+  if (existUser) return res.status(200).json("This email is already existed.");
   const hashedPassword = await bcrypt.hash(password, 10);
   try {
     const user = await User.create({

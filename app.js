@@ -19,12 +19,12 @@ app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(
   cors({
     credentials: true,
-    origin: "http://localhost:5173",
+    origin: "https://killer-nine.vercel.app",
   })
 );
 
 mongoose
-  .connect(process.env.PORT)
+  .connect(process.env.MONGO)
   .then(() => {
     console.log("Connected to MongoDB!");
   })
