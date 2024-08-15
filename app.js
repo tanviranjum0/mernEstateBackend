@@ -19,11 +19,7 @@ app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(
   cors({
     credentials: true,
-<<<<<<< HEAD
-    origin: ["https://killer-nine.vercel.app/", "http://localhost:5173"],
-=======
- 
->>>>>>> 3f3fede6146f8aa523e7247932b85123d820b7dd
+    origin: ["https://killer-nine.vercel.app", "http://localhost:5173"],
   })
 );
 
