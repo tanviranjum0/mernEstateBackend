@@ -121,7 +121,7 @@ const getListings = async (req, res, next) => {
 
     return res.status(200).json(listings);
   } catch (error) {
-    res.status(400).send("There is a problem in listing manupulating");
+    res.status(400).send("There is a problem in listing Search");
   }
 };
 

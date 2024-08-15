@@ -42,7 +42,7 @@ const login = async (req, res) => {
         signed: true,
       })
       .status(201)
-      .json("Login successfully!");
+      .json({ token, status: "Login successfully!" });
   } catch {
     res.status(400).json("Login Problem");
   }
