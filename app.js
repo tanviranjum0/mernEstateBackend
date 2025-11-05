@@ -37,7 +37,10 @@ mongoose
   });
 
 app.get("/", (req, res) => {
-  res.render("index");
+  // res.render("index");
+  res.json({
+    data: "Hello",
+  });
 });
 app.get("/favicon.ico", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "favicon.ico"));
