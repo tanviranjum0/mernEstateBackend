@@ -38,6 +38,7 @@ mongoose
 
 app.get("/", (req, res) => {
   // res.render("index");
+  console.log("testing successfull");
   res.json({
     data: "Hello",
   });
