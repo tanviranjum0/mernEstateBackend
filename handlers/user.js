@@ -1,7 +1,5 @@
 const User = require("../models/user");
 const Listing = require("../models/listing");
-
-// const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const updateUser = async (req, res) => {
   if (req.user.id !== req.params.id)

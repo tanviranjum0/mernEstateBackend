@@ -3,13 +3,14 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
 const checkIfAlreadyLoggedin = (req, res) => {
-  console.log(req.signedCookies.access_token);
+  if (!req.signedCookies.access_token)
+    return res.status(204).json("Couldn't verify User");
   jwt.verify(
     req.signedCookies.access_token,
     process.env.JWT_SECRET,
     (err, user) => {
       if (err) {
-        res.status(400).json("Couldn't verify User");
+        res.status(204).json("Couldn't verify User");
       } else {
         console.log(user);
         res.status(200).json({

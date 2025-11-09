@@ -2,7 +2,6 @@ const Listing = require("../models/listing");
 const path = require("path");
 const createListing = async (req, res) => {
   try {
-    // console.log(req.user);
     req.body.userRef = req.user.id;
     const listing = await Listing.create(req.body);
     return res.status(201).json(listing);
@@ -14,7 +13,6 @@ const handleUpload = async (req, res, next) => {
   const files = req.files;
   const result = [];
   files.map((file) => {
-    // result.push(path.join(__dirname, "public/" + file.filename));
     result.push(file.filename);
   });
   res.status(200).json(result);
