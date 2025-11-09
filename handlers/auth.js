@@ -2,6 +2,24 @@ const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
+const checkIfAlreadyLoggedin = (req, res) => {
+  console.log(req.signedCookies.access_token);
+  jwt.verify(
+    req.signedCookies.access_token,
+    process.env.JWT_SECRET,
+    (err, user) => {
+      if (err) {
+        res.status(400).json("Couldn't verify User");
+      } else {
+        console.log(user);
+        res.status(200).json({
+          data: "Successful",
+        });
+      }
+    }
+  );
+};
+
 const signup = async (req, res, next) => {
   const { username, password, email } = await req.body;
   const existUser = await User.findOne({ email });
@@ -37,12 +55,16 @@ const login = async (req, res) => {
     const token = jwt.sign(userObject, process.env.JWT_SECRET);
     res
       .cookie("access_token", token, {
-        maxAge: process.env.JWT_EXPIRY,
         httpOnly: true,
         signed: true,
       })
       .status(201)
-      .json({ token, status: "Login successfully!" });
+      .json({
+        token,
+        userObject,
+        avatar: validUser.avatar,
+        status: "Login successfully!",
+      });
   } catch {
     res.status(400).json("Login Problem");
   }
@@ -52,4 +74,4 @@ const signOut = (req, res) => {
   res.clearCookie("access_token");
   res.status(200).json("User has been logged out!");
 };
-module.exports = { signup, login, signOut };
+module.exports = { signup, checkIfAlreadyLoggedin, login, signOut };
