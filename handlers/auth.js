@@ -12,7 +12,7 @@ const checkIfAlreadyLoggedin = (req, res) => {
       if (err) {
         res.status(204).json("Couldn't verify User");
       } else {
-        console.log(user);
+        // console.log(user);
         res.status(200).json({
           data: "Successful",
         });
