@@ -42,8 +42,11 @@ app.get("/", (req, res) => {
       "test",
       { Helo: "Cookie" },
       {
+        maxAge: 3600000,
         httpOnly: true,
         signed: true,
+        secure: true,
+        sameSite: "none",
       }
     )
     .json({
