@@ -37,15 +37,24 @@ mongoose
   });
 
 app.get("/", (req, res) => {
-  res.json({
-    data: "Hello",
-  });
+  res
+    .cookie(
+      "test",
+      { Helo: "Cookie" },
+      {
+        httpOnly: true,
+        signed: true,
+      }
+    )
+    .json({
+      data: "Hello",
+    });
 });
 app.get("/favicon.ico", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "favicon.ico"));
 });
 
-// app.all("/favicon.ico", (req, res) => res.status(204));
+app.all("/favicon.ico", (req, res) => res.status(204));
 app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/listing", listingRouter);
