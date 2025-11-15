@@ -13,7 +13,6 @@ const checkIfAlreadyLoggedin = (req, res) => {
       if (err) {
         res.status(204).json("Couldn't verify User");
       } else {
-        // console.log(user);
         res.status(200).json({
           data: "Successful",
         });
@@ -22,17 +21,21 @@ const checkIfAlreadyLoggedin = (req, res) => {
   );
 };
 
-const signup = async (req, res, next) => {
-  const { username, password, email } = await req.body;
+const signup = async (req, res) => {
+  const { username, password, email, avatar } = await req.body;
   const existUser = await User.findOne({ email });
 
-  if (existUser) return res.status(200).json("This email is already existed.");
+  if (existUser) {
+    res.status(200).json("This email is already exist...");
+    return;
+  }
   const hashedPassword = await bcrypt.hash(password, 10);
   try {
     const user = await User.create({
       username,
       password: hashedPassword,
       email,
+      avatar,
     });
 
     res.status(201).json("User created successfully!");
@@ -50,6 +53,7 @@ const login = async (req, res) => {
   if (!validPassword) return res.json("Wrong Credentials");
   try {
     userObject = {
+      name: validUser.username,
       email,
       id: validUser._id,
     };
@@ -57,7 +61,6 @@ const login = async (req, res) => {
     const token = jwt.sign(userObject, process.env.JWT_SECRET);
     res
       .cookie("access_token", token, {
-        maxAge: 3600000,
         httpOnly: true,
         signed: true,
         secure: true,
@@ -76,7 +79,7 @@ const login = async (req, res) => {
 };
 
 const signOut = (req, res) => {
-  res.clearCookie("access_token");
-  res.status(200).json("User has been logged out!");
+  res.clearCookie("access_token").status(200).json("User has been logged out!");
 };
+
 module.exports = { signup, checkIfAlreadyLoggedin, login, signOut };

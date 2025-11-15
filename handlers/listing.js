@@ -18,22 +18,23 @@ const handleUpload = async (req, res, next) => {
   res.status(200).json(result);
 };
 
-const deleteListing = async (req, res, next) => {
+const deleteListing = async (req, res) => {
+  console.log(req.params.id, req.user.id);
   const listing = await Listing.findById(req.params.id);
-
+  console.log(listing.userRef.toString());
   if (!listing) {
-    res.status(400).send("Listing not found!");
+    return res.status(400).send("Listing not found!");
   }
 
-  if (req.user.id !== listing.userRef) {
-    res.status(400).send("You can only delete your own listings!");
+  if (req.user.id !== listing.userRef.toString()) {
+    return res.status(400).send("You can only delete your own listings!");
   }
 
   try {
     await Listing.findByIdAndDelete(req.params.id);
-    res.status(200).json("Listing has been deleted!");
+    return res.status(200).json("Listing has been deleted!");
   } catch (error) {
-    res.status(400).send("There is a problem in listing manupulating");
+    return res.status(400).send("There is a problem in listing manupulating");
   }
 };
 
@@ -123,7 +124,25 @@ const getListings = async (req, res, next) => {
   }
 };
 
+const getuserListings = async (req, res) => {
+  console.log(req.query.startIndex);
+
+  const startIndex = parseInt(req.query.startIndex) | 0;
+  if (req.params.id != req.user.id)
+    return res.status(204).json({ error: "Unauthorized" });
+  try {
+    const listings = await Listing.find({ userRef: req.params.id })
+      .limit(10)
+      .sort({ createdAt: "desc" })
+      .skip(startIndex);
+    res.status(200).json(listings);
+  } catch (error) {
+    res.status(400).send("There is a problem in listing Search");
+  }
+};
+
 module.exports = {
+  getuserListings,
   getListing,
   deleteListing,
   updateListing,

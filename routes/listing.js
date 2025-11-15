@@ -4,6 +4,7 @@ const {
   updateListing,
   createListing,
   handleUpload,
+  getuserListings,
   getListings,
 } = require("../handlers/listing");
 const upload = require("../multer");
@@ -17,6 +18,7 @@ router.delete("/delete/:id", checkLogin, deleteListing);
 router.post("/update/:id", checkLogin, updateListing);
 router.get("/get/:id", getListing);
 router.get("/get", getListings);
+router.get("/user-listings/:id", checkLogin, getuserListings);
 router.post("/create-upload", checkLogin, upload.any("photos"), handleUpload);
 
 module.exports = router;
