@@ -14,6 +14,7 @@ const checkIfAlreadyLoggedin = (req, res) => {
       } else {
         res.status(200).json({
           data: "Successful",
+          user,
         });
       }
     }

@@ -44,10 +44,7 @@ const deleteListing = async (req, res) => {
 };
 
 const updateListing = async (req, res) => {
-  console.log(req.params.id);
-
   const listing = await Listing.findById(req.params.id);
-  // console.log(req.body);
   if (!listing) {
     return res.status(200).json("Listing not found!");
   }

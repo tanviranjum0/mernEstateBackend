@@ -77,7 +77,7 @@ app.use(function (req, res, next) {
 });
 
 app.listen(
-  process.env.PORT ? process.env.PORT : 3000,
+  process.env.PORT || 4000,
   "0.0.0.0",
   console.log(`Server started at port ${process.env.PORT}`)
 );
