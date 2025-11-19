@@ -3,7 +3,6 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
 const checkIfAlreadyLoggedin = (req, res) => {
-  console.log(req.signedCookies.access_token);
   if (!req.signedCookies.access_token)
     return res.status(204).json("Couldn't verify User");
   jwt.verify(
@@ -38,7 +37,7 @@ const signup = async (req, res) => {
       avatar,
     });
 
-    res.status(201).json("User created successfully!");
+    res.status(200).json(user);
   } catch {
     res.status(400).json("User Creating Problem");
   }

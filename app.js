@@ -1,6 +1,8 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const cloudinary = require("cloudinary").v2;
+
 const cookieParser = require("cookie-parser");
 const dotenv = require("dotenv");
 const authRouter = require("./routes/auth");
@@ -36,23 +38,16 @@ mongoose
     console.log(err);
   });
 
-app.get("/", (req, res) => {
-  res
-    .cookie(
-      "test",
-      { Helo: "Cookie" },
-      {
-        maxAge: 3600000,
-        httpOnly: true,
-        signed: true,
-        secure: true,
-        sameSite: "none",
-      }
-    )
-    .json({
-      data: "Hello",
-    });
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
+
+app.get("/", (req, res) => {
+  res.json("API is running...");
+});
+
 app.get("/favicon.ico", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "favicon.ico"));
 });

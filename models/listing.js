@@ -46,10 +46,7 @@ const listingSchema = new mongoose.Schema(
       required: true,
     },
     imageUrls: {
-      type: Array,
-      default: [
-        "https://lirp.cdn-website.com/bf4fe880/dms3rep/multi/opt/estate+vs+a+house+-+Ranger+Ridge-1920w.jpeg",
-      ],
+      type: Object,
     },
     userRef: {
       type: mongoose.Schema.Types.ObjectId,

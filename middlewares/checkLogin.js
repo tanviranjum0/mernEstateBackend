@@ -1,7 +1,6 @@
 const jwt = require("jsonwebtoken");
 const checkLogin = async (req, res, next) => {
   let token;
-  // console.log(req.signedCookies.access_token, req.headers.authorization);
   if (req.signedCookies.access_token) {
     token = req.signedCookies.access_token;
   } else if (req.headers.authorization) {

@@ -1,5 +1,6 @@
 const Listing = require("../models/listing");
-const path = require("path");
+const cloudinary = require("cloudinary").v2;
+
 const createListing = async (req, res) => {
   try {
     req.body.userRef = req.user.id;
@@ -19,32 +20,40 @@ const handleUpload = async (req, res, next) => {
 };
 
 const deleteListing = async (req, res) => {
-  console.log(req.params.id, req.user.id);
   const listing = await Listing.findById(req.params.id);
-  console.log(listing.userRef.toString());
   if (!listing) {
-    return res.status(400).send("Listing not found!");
+    return res.status(400).json("Listing not found!");
   }
 
   if (req.user.id !== listing.userRef.toString()) {
-    return res.status(400).send("You can only delete your own listings!");
+    return res.status(400).json("You can only delete your own listings!");
   }
 
   try {
+    const imageUrls = [];
+    await listing.imageUrls.map((url) => {
+      imageUrls.push(url.public_id);
+    });
+
+    const result = await cloudinary.api.delete_resources(imageUrls);
     await Listing.findByIdAndDelete(req.params.id);
     return res.status(200).json("Listing has been deleted!");
   } catch (error) {
-    return res.status(400).send("There is a problem in listing manupulating");
+    return res.status(400).json("There is a problem in listing manupulating");
   }
 };
 
-const updateListing = async (req, res, next) => {
+const updateListing = async (req, res) => {
+  console.log(req.params.id);
+
   const listing = await Listing.findById(req.params.id);
+  // console.log(req.body);
   if (!listing) {
-    res.status(400).send("Listing not found!");
+    return res.status(200).json("Listing not found!");
   }
-  if (req.user.id !== listing.userRef) {
-    res.status(400).send("You can only update your own listings!");
+
+  if (req.user.id !== listing.userRef.toString()) {
+    return res.status(200).json("You can only update your own listings!");
   }
 
   try {
@@ -53,9 +62,9 @@ const updateListing = async (req, res, next) => {
       req.body,
       { new: true }
     );
-    res.status(200).json(updatedListing);
+    return res.status(200).json(updatedListing);
   } catch (error) {
-    res.status(400).send("There is a problem in listing manupulating");
+    return res.status(400).json("There is a problem in listing manupulating");
   }
 };
 
@@ -64,12 +73,12 @@ const getListing = async (req, res, next) => {
     const listing = await Listing.findById(req.params.id);
 
     if (!listing) {
-      res.status(400).send("Listing not found!");
+      res.status(400).json("Listing not found!");
     } else {
       res.status(200).json(listing);
     }
   } catch (error) {
-    res.status(400).send("There is a problem in listing manupulating");
+    res.status(400).json("There is a problem in listing manupulating");
   }
 };
 
@@ -120,13 +129,11 @@ const getListings = async (req, res, next) => {
 
     return res.status(200).json(listings);
   } catch (error) {
-    res.status(400).send("There is a problem in listing Search");
+    res.status(400).json("There is a problem in listing Search");
   }
 };
 
 const getuserListings = async (req, res) => {
-  console.log(req.query.startIndex);
-
   const startIndex = parseInt(req.query.startIndex) | 0;
   if (req.params.id != req.user.id)
     return res.status(204).json({ error: "Unauthorized" });
@@ -137,8 +144,27 @@ const getuserListings = async (req, res) => {
       .skip(startIndex);
     res.status(200).json(listings);
   } catch (error) {
-    res.status(400).send("There is a problem in listing Search");
+    res.status(400).json("There is a problem in listing Search");
   }
+};
+
+const deleteListingImages = async (req, res) => {
+  const listing = await Listing.findById(req.params.id);
+  if (!listing) {
+    return res.status(200).json("Listing not found!");
+  }
+
+  if (req.user.id !== listing.userRef.toString()) {
+    return res.status(200).json("You can only delete your own listings!");
+  }
+
+  const imageUrls = [];
+  await listing.imageUrls.map((url) => {
+    imageUrls.push(url.public_id);
+  });
+
+  const result = await cloudinary.api.delete_resources(imageUrls);
+  res.status(200).json({ data: result });
 };
 
 module.exports = {
@@ -146,6 +172,7 @@ module.exports = {
   getListing,
   deleteListing,
   updateListing,
+  deleteListingImages,
   createListing,
   handleUpload,
   getListings,

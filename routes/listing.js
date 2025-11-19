@@ -2,6 +2,7 @@ const {
   getListing,
   deleteListing,
   updateListing,
+  deleteListingImages,
   createListing,
   handleUpload,
   getuserListings,
@@ -15,6 +16,7 @@ const router = express.Router();
 
 router.post("/create", checkLogin, createListing);
 router.delete("/delete/:id", checkLogin, deleteListing);
+router.delete("/delete-image/:id", checkLogin, deleteListingImages);
 router.post("/update/:id", checkLogin, updateListing);
 router.get("/get/:id", getListing);
 router.get("/get", getListings);
