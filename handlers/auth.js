@@ -9,6 +9,7 @@ const checkIfAlreadyLoggedin = (req, res) => {
     req.signedCookies.access_token,
     process.env.JWT_SECRET,
     (err, user) => {
+      console.log(user);
       if (err) {
         res.status(204).json("Couldn't verify User");
       } else {
